@@ -1,0 +1,5 @@
+br/ufrn/imd/App.class
+br/ufrn/imd/algorithm/JaroWinklerAlgorithm.class
+br/ufrn/imd/algorithm/CosineAlgorithm.class
+br/ufrn/imd/algorithm/LevenshteinAlgorithm.class
+br/ufrn/imd/algorithm/Algorithm.class
