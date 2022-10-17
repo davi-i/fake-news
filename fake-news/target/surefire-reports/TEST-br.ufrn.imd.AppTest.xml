@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="br.ufrn.imd.AppTest" time="0.003" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="br.ufrn.imd.AppTest" time="0.002" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="17.0.2+8-Debian-1deb11u1"/>
@@ -57,5 +57,5 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.stdout.encoding" value="UTF-8"/>
   </properties>
-  <testcase classname="br.ufrn.imd.AppTest" name="testApp" time="0.003"/>
+  <testcase classname="br.ufrn.imd.AppTest" name="testApp" time="0.002"/>
 </testsuite>

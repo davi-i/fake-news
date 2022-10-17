@@ -19,6 +19,11 @@
         <artifactId>commons-text</artifactId>
         <version>1.9</version>
     </dependency>
+    <dependency>
+        <groupId>com.opencsv</groupId>
+        <artifactId>opencsv</artifactId>
+        <version>5.7.0</version>
+    </dependency>
   </dependencies>
   <build>
       <plugins>
