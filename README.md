@@ -1,14 +1,13 @@
 # Projeto de PDS
 
-Para compilar o projeto, execute:
+Para executar o projeto:
 
 ```
 > cd fake-news
-> mvn clean package
+> mvn install
+> ./mvnw spring-boot:run
 ```
 
-Para executar o projeto, compile e execute:
+Para rodar sem erros, é necessário que exista um banco de dados com o nome `fake_news` e que ele tenha uma tabela `news` assim como no arquivo [database.sql](database.sql). Atualize o arquivo [application.properties](src/resources/application.properties) com as informações adequadas para acessar seu banco de dados.
 
-```
-mvn exec:java -Dexec.mainClass="br.ufrn.imd.App"
-```
+Por enquanto, o programa só está salvando os conteúdos de [fake-news.csv](src/main/resources/fake-news.csv) no banco de dados.
