@@ -1,13 +1,29 @@
-package br.ufrn.imd.model;
+package br.ufrn.imd.entity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class News {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String originalText;
     private String formattedText;
     private String url;
     private LocalDateTime timestamp;
+
+    public News(String originalText, String formattedText, String url, LocalDateTime timestamp) {
+        this.originalText = originalText;
+        this.formattedText = formattedText;
+        this.url = url;
+        this.timestamp = timestamp;
+    }
 
     public News(String[] data) {
         this.originalText = data[1];
@@ -41,6 +57,7 @@ public class News {
     public void setUrl(String url) {
         this.url = url;
     }
+
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
@@ -51,10 +68,10 @@ public class News {
 
     public String toString() {
         return "News {" +
-            "originalText=" + originalText + "," + 
-            "formattedText=" + formattedText + "," +
-            "url=" + url + "," +
-            "timestamp=" + timestamp.toString()
-            + "}";
+                "originalText=" + originalText + "," +
+                "formattedText=" + formattedText + "," +
+                "url=" + url + "," +
+                "timestamp=" + timestamp.toString()
+                + "}";
     }
 }
