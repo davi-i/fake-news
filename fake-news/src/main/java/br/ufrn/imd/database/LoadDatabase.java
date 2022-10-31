@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.opencsv.exceptions.CsvException;
 
 import br.ufrn.imd.entity.News;
-import br.ufrn.imd.io.ReadCsv;
+import br.ufrn.imd.io.ReadCSV;
 import br.ufrn.imd.repository.NewsRepository;
 
 @Configuration
@@ -23,11 +23,9 @@ class LoadDatabase {
   CommandLineRunner initDatabase(NewsRepository repository) {
     return args -> {
       try {
-        ReadCsv.readCsv("src/main/resources/fake-news.csv")
-            .stream()
-            .skip(1)
-            .map(data -> new News(data))
-            .forEach(news -> repository.save(news));
+        NewsRepository.CSVtoNEWS("src/main/resources/arq.txt")
+                      .stream()
+                      .forEach(news -> repository.save(news));
       } catch (IOException | CsvException e) {
         e.printStackTrace();
       }
