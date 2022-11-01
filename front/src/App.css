@@ -1,0 +1,92 @@
+body {
+  background-color: #EEE6D9;
+  font-family: 'Inter';
+  font-style: normal;
+  overflow: auto;
+}
+
+h1 {
+  color: black;
+  text-align: center;
+  font-weight: 200;
+  font-size: 32px;
+}
+
+span {
+  display: block;
+  font-size: 16px;
+  margin: 16px auto;
+}
+
+textarea {
+  box-sizing: border-box;
+
+  border: 1px solid rgba(121, 121, 121, 0.42);
+  box-shadow: -1px 1px 6px 2px rgba(6, 73, 174, 0.11);
+  border-radius: 7px;
+
+  height: 128px;
+
+  width: 100%;
+}
+
+button {
+  font-size: 16px;
+  padding: 7px 132px;
+  color: white;
+  width: 100%;
+}
+
+button.primary {
+  box-sizing: border-box;
+
+  background: #0649AE;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+}
+
+button.secondary {
+  box-sizing: border-box;
+
+  background: #AE0606;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+}
+
+select {
+  width: 100%;
+  padding: auto 132px;
+  height: 32px;
+}
+
+hr {
+  margin: 16px auto;
+}
+
+.center {
+  text-align: center;
+}
+
+.detector {
+  margin: auto 16px;
+}
+
+p {
+  font-size: 12px;
+}
+
+.App {
+  margin: auto 25%;
+}
+
+@media only screen and (max-width: 1024px) {
+  .App {
+    margin: auto 12.5%;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .App {
+    margin: auto 0;
+  }
+}
