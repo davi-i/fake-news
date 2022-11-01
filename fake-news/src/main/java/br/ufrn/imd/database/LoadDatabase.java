@@ -23,7 +23,7 @@ class LoadDatabase {
   CommandLineRunner initDatabase(NewsRepository repository) {
     return args -> {
       try {
-        NewsRepository.CSVtoNEWS("src/main/resources/arq.txt")
+        NewsRepository.CSVtoNEWS("src/main/resources/fake-news.csv")
                       .stream()
                       .forEach(news -> repository.save(news));
       } catch (IOException | CsvException e) {
