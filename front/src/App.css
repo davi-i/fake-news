@@ -1,6 +1,6 @@
 body {
   background-color: #EEE6D9;
-  font-family: 'Inter';
+  font-family: sans-serif;
   font-style: normal;
   overflow: auto;
 }
@@ -12,6 +12,13 @@ h1 {
   font-size: 32px;
 }
 
+caption {
+  color: black;
+  text-align: center;
+  font-weight: 600;
+  font-size: 25px;
+}
+
 span {
   display: block;
   font-size: 16px;
@@ -20,14 +27,13 @@ span {
 
 textarea {
   box-sizing: border-box;
-
   border: 1px solid rgba(121, 121, 121, 0.42);
   box-shadow: -1px 1px 6px 2px rgba(6, 73, 174, 0.11);
   border-radius: 7px;
-
   height: 128px;
-
   width: 100%;
+  resize: none;
+  padding: 6px 12px;
 }
 
 button {
@@ -35,22 +41,18 @@ button {
   padding: 7px 132px;
   color: white;
   width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
 }
 
 button.primary {
-  box-sizing: border-box;
-
   background: #0649AE;
-  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
-  border-radius: 7px;
 }
 
 button.secondary {
-  box-sizing: border-box;
-
   background: #AE0606;
-  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.25);
-  border-radius: 7px;
 }
 
 select {
@@ -63,8 +65,47 @@ hr {
   margin: 16px auto;
 }
 
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+}
+
+td, th {
+  border: 1px solid rgb(133, 133, 133);
+  padding: 8px;
+}
+
+th:first-child {
+  width:50%;
+}
+
+th:nth-child(2) {
+  width:20%;
+}
+
+th:nth-child(3) {
+  width:20%;
+}
+
+td:first-child {
+  text-align:justify;
+}
+
+tr:not(:nth-child(3)):hover {
+  background-color: #f1e0c3;
+}
+
+.read-or-hide{
+  color: #0649AE;
+  cursor: pointer;
+  display: inline;
+}
+
 .center {
   text-align: center;
+  font-weight: 700;
 }
 
 .detector {
