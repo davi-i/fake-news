@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,17 +24,34 @@ public class CSVAccuracy {
     @Autowired
     NewsService fileService;
 
+    @CrossOrigin()
     @PostMapping("/uploadFile")
-    public Double uploadFile(@RequestParam("file") MultipartFile file, Algorithm alg) throws IOException, CsvException  {
-        
+    public Double uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idAlgorithm") int idAlgorithm)
+            throws IOException, CsvException {
+
         List<News> newsArray = NewsRepository.CSVtoNEWS(file.getInputStream());
         List<News> newsArray2 = fileService.load();
 
         List<String> test = newsArray2.stream().map(news -> news.getOriginalText()).collect(Collectors.toList());
 
+        var algorithm = Algorithm.fromId(idAlgorithm);
+
         return newsArray.stream()
-                  .mapToDouble(news -> alg.average(news.getOriginalText(), test))
-                  .average()
-                  .orElse(0);
+                .mapToDouble(news -> algorithm.average(news.getOriginalText(), test))
+                .average()
+                .orElse(0);
+    }
+
+    @CrossOrigin()
+    @PostMapping("/testText")
+    public Double testText(@RequestParam("news") String newsText, @RequestParam("idAlgorithm") int idAlgorithm)
+            throws IOException, CsvException {
+
+        List<News> newsArray2 = fileService.load();
+        List<String> test = newsArray2.stream().map(news -> news.getOriginalText()).collect(Collectors.toList());
+
+        var algorithm = Algorithm.fromId(idAlgorithm);
+
+        return algorithm.average(newsText, test);
     }
 }

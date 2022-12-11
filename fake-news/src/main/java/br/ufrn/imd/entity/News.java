@@ -18,6 +18,10 @@ public class News {
     private String url;
     private LocalDateTime timestamp;
 
+    public News() {
+        super();
+    }
+
     public News(String originalText, String formattedText, String url, LocalDateTime timestamp) {
         this.originalText = originalText;
         this.formattedText = formattedText;

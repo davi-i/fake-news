@@ -1,5 +1,5 @@
 import './App.css'
-import { Children, useState } from 'react'
+import { useState } from 'react'
 
 var showChar = 120;
 
@@ -7,9 +7,8 @@ type News = {
   content: string;
   algorithm: "cosine" | "jaro-winkler" | "levenshtein";
   percentage: number;
+  key: number;
 }
-
-let news: News[] = [{ content: "bla", algorithm: "cosine", percentage: 50},{ content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec eros imperdiet, suscipit ipsum ac, efficitur turpis. Sed ultrices hendrerit libero, laoreet lacinia erat pretium ac.", algorithm: "jaro-winkler", percentage: 50}];
 
 const ReadMore: React.FC<{ children: string }> = ({ children }) => {
   const text = children;
@@ -34,31 +33,88 @@ const ReadMore: React.FC<{ children: string }> = ({ children }) => {
   }
 };
 
-const UploadFile = () => {
-  document.getElementById("uploadFile")?.click();
+const intToAlgorithm = (id: number) => {
+  console.log(id);
+  if (id == 0) {
+    return 'cosine';
+  } else if (id == 1) {
+    return 'jaro-winkler';
+  } else {
+    return 'levenshtein';
+  }
 }
 
+const handleClick = (event: MouseEvent) => {
+  document.getElementById("uploadFile")?.click();
+  event.preventDefault();
+}
+
+let currKey = 0;
+
 function App() {
+
+  const [news, setNews] = useState<News[]>([]);
+  const [disabled, setDisabled] = useState<boolean>(false);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const data = new FormData(form);
+    const file = data.get('file');
+    const newsText = data.get('news');
+    let request;
+    setDisabled(true);
+    document.body.style.cursor = 'wait';
+    if (file.size != 0) {
+      data.delete('news');
+      request = await fetch("http://localhost:8080/uploadFile", {
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:8080',
+          'Access-Control-Allow-Credentials': 'true'
+        },
+        body: data
+      });
+    } else if (newsText) {
+      data.delete('file');
+      request = await fetch("http://localhost:8080/testText", {
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:8080',
+          'Access-Control-Allow-Credentials': 'true'
+        },
+        body: data
+      });
+    }
+    let percentage: number = await request?.json() * 100;
+    document.body.style.cursor = 'default';
+    let newNews = {
+      content: file?.name || newsText || '', percentage, algorithm: intToAlgorithm(data.get('idAlgorithm')), key: currKey++
+    };
+    setNews([newNews, ...news]);
+    setDisabled(false);
+    console.log(percentage);
+  }
   return (
     <div className="App">
       <h1><b>Fake News Detector</b></h1>
-      <div className="detector">
+      <form id="form" enctype="multipart/form-data" onSubmit={handleSubmit}>
         <span>Insert your text:</span>
 
-        <textarea placeholder="Your text goes here"></textarea>
+        <textarea name="news" placeholder="Your text goes here"></textarea>
 
         <span className="center">OR</span>
 
-        <button className='primary' onClick={UploadFile}>upload csv file</button>
-        <input id="uploadFile" type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden/>
+        <button className='primary' onClick={handleClick}>upload csv file</button>
+        <input id="uploadFile" type="file" accept=".csv" name="file" hidden />
 
         <hr />
 
         <span>Select an Algorithm:</span>
 
 
-        <select>
-          <option disabled selected>-- select an algorithm --</option>
+        <select name="idAlgorithm" required>
+          <option value="" disabled selected>-- select an algorithm --</option>
           <option value={0}>Cosine Algorithm</option>
           <option value={1}>Jaro-Winkler Algorithm</option>
           <option value={2}>Levenshtein Distance Algorithm</option>
@@ -66,24 +122,24 @@ function App() {
 
         <hr />
 
-        <button className='secondary'>Find The Truth!</button>
-      </div>
-      <br/><br/>
+        <button className='secondary' disabled={disabled}>Find The Truth!</button>
+      </form>
+      <br /><br />
       <table>
         <caption>History</caption>
-        <br/>
+        <br />
         <tr>
           <th>News</th>
           <th>Algorithm</th>
           <th>Percentage (%)</th>
         </tr>
-        {news.map((news) => (
-        <tr>
-          <ReadMore>{news.content}</ReadMore>
-          <td>{news.algorithm}</td>
-          <td>{news.percentage}</td>
-        </tr>
-        ))}       
+        {news.slice(0, 5).map((news) => (
+          <tr key={news.key}>
+            <ReadMore>{news.content}</ReadMore>
+            <td>{news.algorithm}</td>
+            <td>{news.percentage.toFixed(2)}%</td>
+          </tr>
+        ))}
       </table>
     </div>
   )
