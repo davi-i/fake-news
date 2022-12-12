@@ -19,15 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ReadCSV {
 
-    public static final String TYPE = "text/csv";
-
-    public static boolean isCSV(MultipartFile file) {
-        if (!TYPE.equals(file.getContentType())) {
-            return false;
-        }
-        return true;
-    }
-
     public static List<String[]> readCSV(String path) throws IOException, CsvException {
         var reader = new CSVReader(new FileReader(path));
         return reader.readAll();

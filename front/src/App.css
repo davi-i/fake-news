@@ -51,6 +51,10 @@ button.primary {
   background: #0649AE;
 }
 
+input {
+  align-self: center;
+}
+
 button.secondary {
   background: #AE0606;
 }
@@ -70,10 +74,11 @@ table {
   border-collapse: collapse;
   width: 100%;
   text-align: center;
+  display: none;
 }
 
 td, th {
-  border: 1px solid rgb(133, 133, 133);
+  border-bottom: 1px solid rgb(133, 133, 133);
   padding: 8px;
 }
 

@@ -49,6 +49,10 @@ const handleClick = (event: MouseEvent) => {
   event.preventDefault();
 }
 
+const handleChange = (event) => {
+  document.getElementById("uploadFileInput")!.innerText = `Selected file - ${event.target.files[0].name}`;
+}
+
 let currKey = 0;
 
 function App() {
@@ -93,8 +97,12 @@ function App() {
     };
     setNews([newNews, ...news]);
     setDisabled(false);
-    console.log(percentage);
+
+    if (document.getElementById("table")!.style.display = 'none') {
+      document.getElementById("table")!.style.display = 'table';
+    }
   }
+
   return (
     <div className="App">
       <h1><b>Fake News Detector</b></h1>
@@ -105,8 +113,8 @@ function App() {
 
         <span className="center">OR</span>
 
-        <button className='primary' onClick={handleClick}>upload csv file</button>
-        <input id="uploadFile" type="file" accept=".csv" name="file" hidden />
+        <button id="uploadFileInput" className='primary' onClick={handleClick}>upload csv file</button>
+        <input id="uploadFile" type="file" accept=".csv" name="file" onChange={handleChange} hidden />
 
         <hr />
 
@@ -125,7 +133,7 @@ function App() {
         <button className='secondary' disabled={disabled}>Find The Truth!</button>
       </form>
       <br /><br />
-      <table>
+      <table id="table">
         <caption>History</caption>
         <br />
         <tr>
