@@ -22,22 +22,22 @@ import br.ufrn.imd.service.NewsService;
 public class CSVAccuracy {
 
     @Autowired
-    NewsService fileService;
+    NewsService newsService;
 
     @CrossOrigin()
     @PostMapping("/accuracy/file")
     public Double accuracy(@RequestParam("file") MultipartFile file, @RequestParam("idAlgorithm") int idAlgorithm)
             throws IOException, CsvException {
 
-        List<News> newsArray = NewsRepository.CsvToNews(file.getInputStream());
-        List<News> newsArray2 = fileService.load();
+        var fileNews = NewsRepository.CsvToNews(file.getInputStream());
+        var storedNews = newsService.load();
 
-        List<String> test = newsArray2.stream().map(news -> news.getOriginalText()).collect(Collectors.toList());
+        var newsText = storedNews.stream().map(news -> news.getFormattedText());
 
         var algorithm = Algorithm.fromId(idAlgorithm);
 
-        return newsArray.stream()
-                .mapToDouble(news -> algorithm.average(news.getOriginalText(), test))
+        return fileNews.stream()
+                .mapToDouble(news -> algorithm.average(news.getFormattedText(), newsText))
                 .average()
                 .orElse(0);
     }
@@ -47,8 +47,8 @@ public class CSVAccuracy {
     public Double accuracy(@RequestParam("news") String newsText, @RequestParam("idAlgorithm") int idAlgorithm)
             throws IOException, CsvException {
 
-        List<News> newsArray2 = fileService.load();
-        List<String> test = newsArray2.stream().map(news -> news.getOriginalText()).collect(Collectors.toList());
+        var storedNews = newsService.load();
+        var test = storedNews.stream().map(news -> news.getFormattedText());
 
         var algorithm = Algorithm.fromId(idAlgorithm);
 

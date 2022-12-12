@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.ufrn.imd.string.StringProcessor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,16 +28,16 @@ public class News {
         super();
     }
 
-    public News(String originalText, String formattedText, String url, LocalDateTime timestamp) {
+    public News(String originalText, String url, LocalDateTime timestamp) {
         this.originalText = originalText;
-        this.formattedText = formattedText;
+        this.formattedText = StringProcessor.process(originalText);
         this.url = url;
         this.timestamp = timestamp;
     }
 
     public News(String[] data) {
         this.originalText = data[1];
-        this.formattedText = "";
+        this.formattedText = StringProcessor.process(this.originalText);
         this.url = data[2];
 
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
