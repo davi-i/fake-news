@@ -47,6 +47,10 @@ button {
   border-radius: 7px;
 }
 
+button:disabled {
+  cursor: inherit;
+}
+
 button.primary {
   background: #0649AE;
 }
@@ -74,7 +78,6 @@ table {
   border-collapse: collapse;
   width: 100%;
   text-align: center;
-  display: none;
 }
 
 td, th {

@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, MouseEventHandler, useState } from 'react'
 
 var showChar = 120;
 
@@ -33,8 +33,32 @@ const ReadMore: React.FC<{ children: string }> = ({ children }) => {
   }
 };
 
-const intToAlgorithm = (id: number) => {
-  console.log(id);
+const Table: React.FC<{ news: News[] }> = ({ news }) => {
+  if (news.length == 0) {
+    return <></>;
+  }
+  return <table id="table">
+    <caption>History</caption>
+    <thead>
+      <tr>
+        <th>News</th>
+        <th>Algorithm</th>
+        <th>Percentage (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {news.slice(0, 5).map((news) => (
+        <tr key={news.key}>
+          <ReadMore>{news.content}</ReadMore>
+          <td>{news.algorithm}</td>
+          <td>{news.percentage.toFixed(2)}%</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+}
+
+const intToAlgorithm = (id: number): 'cosine' | 'jaro-winkler' | 'levenshtein' => {
   if (id == 0) {
     return 'cosine';
   } else if (id == 1) {
@@ -44,13 +68,28 @@ const intToAlgorithm = (id: number) => {
   }
 }
 
-const handleClick = (event: MouseEvent) => {
+const handleClick: MouseEventHandler = (event) => {
   document.getElementById("uploadFile")?.click();
   event.preventDefault();
 }
 
-const handleChange = (event) => {
-  document.getElementById("uploadFileInput")!.innerText = `Selected file - ${event.target.files[0].name}`;
+const handleChange = (event: ChangeEvent) => {
+  const button = document.getElementById("uploadFileInput") as HTMLButtonElement;
+  const input = event.target as HTMLInputElement;
+  button.innerText = `Selected file - ${input.files![0].name}`;
+}
+
+const getPercentage = async (route: string, data: FormData) => {
+  let request = await fetch("http://localhost:8080/" + route, {
+    method: 'POST',
+    headers: {
+      'Access-Control-Allow-Origin': 'http://localhost:8080',
+      'Access-Control-Allow-Credentials': 'true'
+    },
+    body: data
+  });
+
+  return await request.json() as number * 100;
 }
 
 let currKey = 0;
@@ -60,53 +99,43 @@ function App() {
   const [news, setNews] = useState<News[]>([]);
   const [disabled, setDisabled] = useState<boolean>(false);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const form = event.target;
+    const form = event.target as HTMLFormElement;
     const data = new FormData(form);
-    const file = data.get('file');
-    const newsText = data.get('news');
-    let request;
+
+    const file = data.get('file') as File;
+    const newsText = data.get('news') as string;
+
     setDisabled(true);
     document.body.style.cursor = 'wait';
+
+    let percentage;
     if (file.size != 0) {
       data.delete('news');
-      request = await fetch("http://localhost:8080/uploadFile", {
-        method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:8080',
-          'Access-Control-Allow-Credentials': 'true'
-        },
-        body: data
-      });
+      percentage = await getPercentage("accuracy/file", data);
     } else if (newsText) {
       data.delete('file');
-      request = await fetch("http://localhost:8080/testText", {
-        method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:8080',
-          'Access-Control-Allow-Credentials': 'true'
-        },
-        body: data
-      });
+      percentage = await getPercentage("accuracy", data);
+    } else {
+      return;
     }
-    let percentage: number = await request?.json() * 100;
-    document.body.style.cursor = 'default';
-    let newNews = {
-      content: file?.name || newsText || '', percentage, algorithm: intToAlgorithm(data.get('idAlgorithm')), key: currKey++
+
+    const idAlgorithm = data.get('idAlgorithm') as string;
+
+    const newNews = {
+      content: file.name || newsText || '', percentage, algorithm: intToAlgorithm(+idAlgorithm), key: currKey++
     };
+
+    document.body.style.cursor = 'default';
     setNews([newNews, ...news]);
     setDisabled(false);
-
-    if (document.getElementById("table")!.style.display = 'none') {
-      document.getElementById("table")!.style.display = 'table';
-    }
   }
 
   return (
     <div className="App">
       <h1><b>Fake News Detector</b></h1>
-      <form id="form" enctype="multipart/form-data" onSubmit={handleSubmit}>
+      <form id="form" encType="multipart/form-data" onSubmit={handleSubmit}>
         <span>Insert your text:</span>
 
         <textarea name="news" placeholder="Your text goes here"></textarea>
@@ -121,8 +150,8 @@ function App() {
         <span>Select an Algorithm:</span>
 
 
-        <select name="idAlgorithm" required>
-          <option value="" disabled selected>-- select an algorithm --</option>
+        <select name="idAlgorithm" defaultValue="" required>
+          <option value="" disabled>-- select an algorithm --</option>
           <option value={0}>Cosine Algorithm</option>
           <option value={1}>Jaro-Winkler Algorithm</option>
           <option value={2}>Levenshtein Distance Algorithm</option>
@@ -133,22 +162,7 @@ function App() {
         <button className='secondary' disabled={disabled}>Find The Truth!</button>
       </form>
       <br /><br />
-      <table id="table">
-        <caption>History</caption>
-        <br />
-        <tr>
-          <th>News</th>
-          <th>Algorithm</th>
-          <th>Percentage (%)</th>
-        </tr>
-        {news.slice(0, 5).map((news) => (
-          <tr key={news.key}>
-            <ReadMore>{news.content}</ReadMore>
-            <td>{news.algorithm}</td>
-            <td>{news.percentage.toFixed(2)}%</td>
-          </tr>
-        ))}
-      </table>
+      <Table news={news} />
     </div>
   )
 }

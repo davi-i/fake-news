@@ -8,14 +8,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public class ReadCSV {
 
@@ -23,7 +17,7 @@ public class ReadCSV {
         var reader = new CSVReader(new FileReader(path));
         return reader.readAll();
     }
-    
+
     public static List<String[]> readCSV(InputStream is) throws IOException, CsvException {
         try {
             BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -31,7 +25,7 @@ public class ReadCSV {
             var list = reader.readAll();
             reader.close();
             return list;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }

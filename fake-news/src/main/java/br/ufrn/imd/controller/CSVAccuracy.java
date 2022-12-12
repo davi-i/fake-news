@@ -25,11 +25,11 @@ public class CSVAccuracy {
     NewsService fileService;
 
     @CrossOrigin()
-    @PostMapping("/uploadFile")
-    public Double uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idAlgorithm") int idAlgorithm)
+    @PostMapping("/accuracy/file")
+    public Double accuracy(@RequestParam("file") MultipartFile file, @RequestParam("idAlgorithm") int idAlgorithm)
             throws IOException, CsvException {
 
-        List<News> newsArray = NewsRepository.CSVtoNEWS(file.getInputStream());
+        List<News> newsArray = NewsRepository.CsvToNews(file.getInputStream());
         List<News> newsArray2 = fileService.load();
 
         List<String> test = newsArray2.stream().map(news -> news.getOriginalText()).collect(Collectors.toList());
@@ -43,8 +43,8 @@ public class CSVAccuracy {
     }
 
     @CrossOrigin()
-    @PostMapping("/testText")
-    public Double testText(@RequestParam("news") String newsText, @RequestParam("idAlgorithm") int idAlgorithm)
+    @PostMapping("/accuracy")
+    public Double accuracy(@RequestParam("news") String newsText, @RequestParam("idAlgorithm") int idAlgorithm)
             throws IOException, CsvException {
 
         List<News> newsArray2 = fileService.load();
