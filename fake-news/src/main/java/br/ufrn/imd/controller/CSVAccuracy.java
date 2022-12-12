@@ -17,6 +17,7 @@ import br.ufrn.imd.algorithm.Algorithm;
 import br.ufrn.imd.entity.News;
 import br.ufrn.imd.repository.NewsRepository;
 import br.ufrn.imd.service.NewsService;
+import br.ufrn.imd.string.StringProcessor;
 
 @RestController
 public class CSVAccuracy {
@@ -52,6 +53,6 @@ public class CSVAccuracy {
 
         var algorithm = Algorithm.fromId(idAlgorithm);
 
-        return algorithm.average(newsText, test);
+        return algorithm.average(StringProcessor.process(newsText), test);
     }
 }
