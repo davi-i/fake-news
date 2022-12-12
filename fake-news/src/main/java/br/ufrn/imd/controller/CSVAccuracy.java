@@ -30,7 +30,7 @@ public class CSVAccuracy {
     public Double accuracy(@RequestParam("file") MultipartFile file, @RequestParam("idAlgorithm") int idAlgorithm)
             throws IOException, CsvException {
 
-        var fileNews = NewsRepository.CsvToNews(file.getInputStream());
+        var fileNews = NewsRepository.csvToNews(file.getInputStream());
         var storedNews = newsService.load();
 
         var newsText = storedNews.stream().map(news -> news.getFormattedText());
@@ -38,7 +38,7 @@ public class CSVAccuracy {
         var algorithm = Algorithm.fromId(idAlgorithm);
 
         return fileNews.stream()
-                .mapToDouble(news -> algorithm.average(news.getFormattedText(), newsText))
+                .mapToDouble(news -> algorithm.max(news.getFormattedText(), newsText))
                 .average()
                 .orElse(0);
     }
@@ -53,6 +53,6 @@ public class CSVAccuracy {
 
         var algorithm = Algorithm.fromId(idAlgorithm);
 
-        return algorithm.average(StringProcessor.process(newsText), test);
+        return algorithm.max(StringProcessor.process(newsText), test);
     }
 }

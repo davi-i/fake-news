@@ -20,11 +20,11 @@ public interface NewsRepository extends JpaRepository<News, Long> {
                 .collect(Collectors.toList());
     }
 
-    public static List<News> CsvToNews(String path) throws IOException, CsvException {
+    public static List<News> csvToNews(String path) throws IOException, CsvException {
         return csvToNews(ReadCSV.readCSV(path));
     }
 
-    public static List<News> CsvToNews(InputStream is) throws IOException, CsvException {
+    public static List<News> csvToNews(InputStream is) throws IOException, CsvException {
         return csvToNews(ReadCSV.readCSV(is));
     }
 }

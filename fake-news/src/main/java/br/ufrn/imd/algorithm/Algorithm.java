@@ -5,9 +5,9 @@ import java.util.stream.Stream;
 public interface Algorithm {
     public abstract Double calculate(CharSequence left, CharSequence right);
 
-    public default Double average(CharSequence left, Stream<String> rights) {
+    public default Double max(CharSequence left, Stream<String> rights) {
         return rights.mapToDouble(right -> this.calculate(left, right))
-                .average()
+                .max()
                 .orElse(0);
     }
 

@@ -8,7 +8,7 @@ public class StringProcessor {
     // remove accents
     input = Normalizer.normalize(input, Normalizer.Form.NFD);
     input = input.replaceAll("[^\\x00-\\x7F]", "");
-    // remove words with less than 3 words
+    // remove words with less than 3 letters
     input = input.replaceAll("\\b\\w{1,3}\\b\\s?", "");
     // remove non alfanumeric symbols
     input = input.replaceAll("[^a-zA-Z0-9\\s]", "");
